@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "359635868227",
+    "project_id": "dibujos-c9853",
+    "storage_bucket": "dibujos-c9853.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:359635868227:android:e5681bbb9dd609bbbd12f6",
+        "android_client_info": {
+          "package_name": "com.example.app_draw"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "359635868227-7bgmi973t3vf0i65dk54sfba4ps8qusi.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBb71SFptGw4HvmNUBnXg227KGoayKMnqQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "359635868227-7bgmi973t3vf0i65dk54sfba4ps8qusi.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
