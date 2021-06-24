@@ -22,7 +22,7 @@ class _ImagePage extends State<ImagePage> {
         },
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('imageURLs').snapshots(),
+        stream: FirebaseFirestore.instance.collection('draws').snapshots(),
         builder: (context, snapshot) {
           return !snapshot.hasData
               ? Center(
@@ -33,10 +33,10 @@ class _ImagePage extends State<ImagePage> {
                   child: GridView.builder(
                       itemCount: snapshot.data.docs.length,
                       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3),
+                          crossAxisCount: 2),
                       itemBuilder: (context, index) {
                         return Container(
-                          margin: EdgeInsets.all(3),
+                          margin: EdgeInsets.all(2),
                           child: FadeInImage.memoryNetwork(
                               fit: BoxFit.cover,
                               placeholder: kTransparentImage,

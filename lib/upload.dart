@@ -70,7 +70,7 @@ class _AddImageState extends State<AddImage> {
                     children: [
                       Container(
                         child: Text(
-                          'uploading...',
+                          'Subiendo dibujo :) ',
                           style: TextStyle(fontSize: 20),
                         ),
                       ),
@@ -119,7 +119,7 @@ class _AddImageState extends State<AddImage> {
       });
       ref = firebase_storage.FirebaseStorage.instance
           .ref()
-          .child('images/${Path.basename(img.path)}');
+          .child('dibujitos/${Path.basename(img.path)}');
       await ref.putFile(img).whenComplete(() async {
         await ref.getDownloadURL().then((value) {
           imgRef.add({'url': value});
@@ -132,6 +132,6 @@ class _AddImageState extends State<AddImage> {
   @override
   void initState() {
     super.initState();
-    imgRef = FirebaseFirestore.instance.collection('imageURLs');
+    imgRef = FirebaseFirestore.instance.collection('draws');
   }
 }

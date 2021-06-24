@@ -10,7 +10,11 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'dart:io';
-
+import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter/rendering.dart';
+import 'dart:ui' as ui;
+import 'dart:typed_data';
 
 const AppBarColor = const Color(0xFF35225C);
 const MenuSideBar = const Color(0xFF35225C);
@@ -20,6 +24,7 @@ const ToolBarColor = const Color(0xCC5510DB);
   double brushWidth=0;
       String imageUrl;
     Color selectedColor;
+      GlobalKey globalKey = GlobalKey();
     
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -69,7 +74,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
   @override
   Widget build(BuildContext context) {
-
+double bwidth = MediaQuery.of(context).size.width;
+double bheight = MediaQuery.of(context).size.height;
         void selectColor() {
                       showDialog(
                         context: context,
@@ -96,8 +102,6 @@ class _MyHomePageState extends State<MyHomePage> {
                           );
                         },
                       );
-    }
-    void selectBrushWidth() async{
     }
     return Scaffold(
       drawer: NavDrawer(),
@@ -140,11 +144,21 @@ class _MyHomePageState extends State<MyHomePage> {
             });
           },
           onPanEnd: (DragEndDetails details) => points.add(null),
-          child: new CustomPaint(
-            painter: new Signature(points: points),
-            size: Size.infinite,
+          child: RepaintBoundary(
+        key: globalKey,
+        child: Stack (
+        children:<Widget>[           Container(
+            color: Colors.white,
+            width: bwidth,
+            height: bheight,
           ),
+          CustomPaint(
+            painter: Signature(points: points),
+            size: Size.infinite,
+          )])
+          )
         ),
+        ///////////////////////////////////////////////////////////////////////////////////////////////
       ),
     Positioned.fill(
       child: Align(
@@ -203,6 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
     )
   ],
 )
+///////////////////////////////////////////////////////////////////////////////////////////////////////
     );
   }
 }
@@ -258,7 +273,10 @@ class NavDrawer extends StatelessWidget {
       child:  ListTile(
             leading: Icon(Icons.save_alt),
             title: Text('GUARDAR EN DISPOSITIVO'),
-            onTap: () => {},
+            onTap: () => {
+      _save()
+
+            },
           ),
       ),
                     ListTileTheme(
@@ -329,9 +347,23 @@ class Signature extends CustomPainter {
 
     } else {
       print('Grant Permissions and try again');
-    }
-
-    
-
-    
+    }    
   }
+
+  Future<void> _save() async {
+  RenderRepaintBoundary boundary =
+      globalKey.currentContext.findRenderObject();
+  ui.Image image = await boundary.toImage();
+  ByteData byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+  Uint8List pngBytes = byteData.buffer.asUint8List();
+
+  //Request permissions if not already granted
+  if (!(await Permission.storage.status.isGranted))
+    await Permission.storage.request();
+
+  final result = await ImageGallerySaver.saveImage(
+      Uint8List.fromList(pngBytes),
+      quality: 60,
+      name: "canvas_image");
+  print(result);
+}
